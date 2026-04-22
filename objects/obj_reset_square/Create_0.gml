@@ -1,0 +1,3 @@
+function reset() {
+	puzzle.reset();
+}

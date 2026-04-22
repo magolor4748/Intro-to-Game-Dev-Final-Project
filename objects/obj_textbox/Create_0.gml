@@ -1,0 +1,56 @@
+function create() {
+	global.textbox = self;
+	is_visible = false;
+	talking = false;
+	talking_timer = 0;
+	text = "Default";
+	textbox_width = 160;
+	textbox_height = 48;
+}
+
+function step() {
+	if (is_visible) {
+		if (talking) {
+			talking_timer++;
+			if (talking_timer == 40) {
+				talking_timer = 0;
+				talking = false;
+			} else if (talking_timer % 8 == 0) {
+				audio_play_sound_ext({sound: snd_talk, priority: 1, loop: false, pitch: .9 + random(1)});
+			}
+		}
+		if (distance_to_point(global.plr.x, global.plr.y - 24) > 25) {
+			talking_timer = 0;
+			talking = false;
+			is_visible = false;
+			text = "Default";
+		}
+	}
+}
+
+function set_text(text) {
+	id.text = text;
+}
+
+function make_visible() {
+	if (not is_visible) {
+		is_visible = true;
+		talking = true;
+	}
+}
+
+function prepare_message(npc) {
+	set_text(npc.get_text());
+	x = npc.x + npc.sprite_width / 2;
+	y = npc.y - 24;
+}
+
+function draw() {
+	if (is_visible) {
+		draw_sprite_stretched(spr_textbox, -1, x - textbox_width / 2, y - textbox_height / 2, textbox_width, textbox_height);
+		draw_set_colour(#F8941D);
+		draw_text(x - textbox_width / 2 + 6, y - textbox_height / 2 + 3, text);
+	}
+}
+
+create();
