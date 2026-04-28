@@ -165,6 +165,36 @@ function interact() {
 	}
 }
 
+function highlight() {
+	switch (facing) {
+	case  Directions.UP:
+		thing = collision_rectangle(x + sprite_width / 2 - 3, y + sprite_height - 4,
+									x + sprite_width / 2 + 3, y + sprite_height - 3,
+									obj_stone, false, true);
+		break;
+	case Directions.LEFT:
+		thing = collision_rectangle(x + sprite_width / 2 - 4, y + sprite_height - 3,
+									x + sprite_width / 2 - 3, y + sprite_height,
+									obj_stone, false, true);
+		break;
+	case Directions.DOWN:
+		thing = collision_rectangle(x + sprite_width / 2 - 3, y + sprite_height,
+									x + sprite_width / 2 + 3, y + sprite_height + 1,
+									obj_stone, false, true);
+		break;
+	case Directions.RIGHT:
+		thing = collision_rectangle(x + sprite_width / 2 + 3, y + sprite_height - 3,
+									x + sprite_width / 2 + 4, y + sprite_height,
+									obj_stone, false, true);
+		break;
+	}
+	if (thing != noone) {
+		thing.highlight = true;
+		thing.highlight_dir = facing;
+		return;
+	}
+}
+
 function crowbar() {
 	global.crowbar_collected = true;
 }
@@ -172,6 +202,7 @@ function crowbar() {
 function step() {
 	check_inputs();
 	move();
+	highlight();
 	if (keyboard_check_pressed(vk_space)) {
 		interact();
 	}

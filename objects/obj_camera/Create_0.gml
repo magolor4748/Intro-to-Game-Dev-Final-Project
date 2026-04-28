@@ -4,6 +4,11 @@ function create() {
 	camera_speed = .5;
 	max_dist = 5;
 	min_dist = camera_speed
+	
+	var _window_scale = 4;
+	surface_resize(application_surface, 240, 160);
+	window_set_size(240 * _window_scale, 160 * _window_scale);
+	window_center();
 }
 
 function step() {

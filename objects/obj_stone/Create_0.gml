@@ -48,6 +48,11 @@ function step() {
 			moving_timer += 1;
 			position_x = previous_x + (x - previous_x) * (moving_timer / moving_max);
 			position_y = previous_y + (y - previous_y) * (moving_timer / moving_max);
+			for (var dx = -1; dx <= 1; dx++) {
+				for (var dy = -1; dy <= 1; dy++) {
+					instance_create_layer(position_x + 8 - 5 * sign(x - previous_x) + dx, position_y + 12 - 2 * sign(y - previous_y) + dy, "Back", obj_dust);
+				}
+			}
 		}
 	}
 }
@@ -57,7 +62,12 @@ function win(square) {
 }
 
 function draw() {
-	draw_sprite(sprite_index, -1, position_x, position_y);
+	draw_sprite(sprite_index, 0, position_x, position_y);
+	if (not moving and highlight) {
+		highlight = false;
+		draw_sprite(sprite_index, 1, position_x, position_y);
+		draw_sprite(spr_pointers, highlight_dir, position_x, position_y);
+	}
 }
 
 create();
