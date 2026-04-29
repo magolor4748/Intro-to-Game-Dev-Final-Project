@@ -15,6 +15,7 @@ function create() {
 	sprinting = false;
 	x_move = 0;
 	y_move = 0;
+	frozen = false;
 	step_timer_max = 30;
 	step_timer = step_timer_max;
 	spr_ind = 0;
@@ -112,7 +113,7 @@ function move() {
 function win() {
 	audio_stop_sound(snd_cave);
 	audio_play_sound(snd_exit, 2, false);
-	room_goto(rm_end);
+	obj_transition.transition_next(c_black);
 }
 
 function interact() {
@@ -200,48 +201,50 @@ function crowbar() {
 }
 
 function step() {
-	check_inputs();
-	move();
-	highlight();
-	if (keyboard_check_pressed(vk_space)) {
-		interact();
-	}
-	if (x_move == 0 and y_move == 0) {
-		step_timer = step_timer_max;
-	} else {
-		if (--step_timer == 0) {
-			step_timer = step_timer_max;
+	if (not frozen) {
+		check_inputs();
+		move();
+		highlight();
+		if (keyboard_check_pressed(vk_space)) {
+			interact();
 		}
-		ds_list_copy(temp_pressed, pressed);
-		while (ds_list_size(temp_pressed) > 0) {
-			top_value = ds_list_find_value(temp_pressed, ds_list_size(temp_pressed) - 1);
-			switch (top_value) {
-			case Directions.LEFT:
-				if (ds_list_find_index(temp_pressed, Directions.RIGHT) != -1) {
-					ds_list_delete(temp_pressed, ds_list_size(temp_pressed) - 1);
-					continue;
+		if (x_move == 0 and y_move == 0) {
+			step_timer = step_timer_max;
+		} else {
+			if (--step_timer == 0) {
+				step_timer = step_timer_max;
+			}
+			ds_list_copy(temp_pressed, pressed);
+			while (ds_list_size(temp_pressed) > 0) {
+				top_value = ds_list_find_value(temp_pressed, ds_list_size(temp_pressed) - 1);
+				switch (top_value) {
+				case Directions.LEFT:
+					if (ds_list_find_index(temp_pressed, Directions.RIGHT) != -1) {
+						ds_list_delete(temp_pressed, ds_list_size(temp_pressed) - 1);
+						continue;
+					}
+					break;
+				case  Directions.UP:
+					if (ds_list_find_index(temp_pressed, Directions.DOWN) != -1) {
+						ds_list_delete(temp_pressed, ds_list_size(temp_pressed) - 1);
+						continue;
+					}
+					break;
+				case Directions.DOWN:
+					break;
+				case Directions.RIGHT:			
+					if (ds_list_size(temp_pressed) == 4) {
+						ds_list_delete(temp_pressed, ds_list_size(temp_pressed) - 1);
+						continue;
+					}
+					break;
 				}
-				break;
-			case  Directions.UP:
-				if (ds_list_find_index(temp_pressed, Directions.DOWN) != -1) {
-					ds_list_delete(temp_pressed, ds_list_size(temp_pressed) - 1);
-					continue;
-				}
-				break;
-			case Directions.DOWN:
-				break;
-			case Directions.RIGHT:			
-				if (ds_list_size(temp_pressed) == 4) {
-					ds_list_delete(temp_pressed, ds_list_size(temp_pressed) - 1);
-					continue;
-				}
+				facing = top_value;
 				break;
 			}
-			facing = top_value;
-			break;
 		}
-		spr_ind = [9,3,0,6][facing]
 	}
+	spr_ind = [9,3,0,6][facing]
 }
 function draw() {
 	var curr_spr = spr_ind +

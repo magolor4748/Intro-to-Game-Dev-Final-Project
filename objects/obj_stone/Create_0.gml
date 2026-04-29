@@ -8,6 +8,7 @@ function reset() {
 }
 
 function move(dir) {
+	puzzle.reset_square.enabled = true;
 	if (moving) return;
 	switch(dir) {
 		case Directions.UP:
@@ -42,7 +43,7 @@ function step() {
 			reset();
 			var square = instance_place(x, y, obj_win_square);
 			if (square != noone) {
-				id.win(square);
+				puzzle.win();
 			}
 		} else {
 			moving_timer += 1;
@@ -64,8 +65,13 @@ function win(square) {
 function draw() {
 	draw_sprite(sprite_index, 0, position_x, position_y);
 	if (not moving and highlight) {
-		highlight = false;
 		draw_sprite(sprite_index, 1, position_x, position_y);
+	}
+}
+
+function after_draw() {
+	if (not moving and highlight) {
+		highlight = false;
 		draw_sprite(spr_pointers, highlight_dir, position_x, position_y);
 	}
 }

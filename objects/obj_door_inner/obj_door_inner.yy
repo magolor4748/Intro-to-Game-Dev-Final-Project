@@ -7,7 +7,7 @@
   "managed":true,
   "name":"obj_door_inner",
   "overriddenProperties":[
-    {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_door","path":"objects/obj_door/obj_door.yy",},"propertyId":{"name":"destroy_self","path":"objects/obj_door/obj_door.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"function() {global.door_unlocked = true; instance_destroy(id, true);}",},
+    {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_door","path":"objects/obj_door/obj_door.yy",},"propertyId":{"name":"destroy_self","path":"objects/obj_door/obj_door.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"function() {global.door_unlocked = true; instance_destroy(id, true); global.plr.frozen = true; ds_stack_push(obj_camera.alt_targets, {x_pos: x, y_pos: y, timer: 80, callback: function(){global.plr.frozen = false; obj_duck.duck(); audio_play_sound(snd_door, 2, false);}})}",},
   ],
   "parent":{
     "name":"Objects",

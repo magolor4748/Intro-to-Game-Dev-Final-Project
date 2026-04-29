@@ -46,6 +46,8 @@ function prepare_message(npc) {
 }
 
 function draw() {
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_top);
 	if (is_visible) {
 		draw_sprite_stretched(spr_textbox, -1, x - textbox_width / 2, y - textbox_height / 2, textbox_width, textbox_height);
 		draw_set_colour(#F8941D);

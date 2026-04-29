@@ -3,13 +3,16 @@ function create() {
 	draw_set_valign(fa_middle);
 	draw_set_colour(c_white);
 	draw_set_font(fnt_main);
+	surface_resize(application_surface, 960, 640);
+	window_set_size(960, 640);
+	window_center();
 }
 
 function step() {
 	if (keyboard_check_pressed(vk_space)) {
 		draw_set_halign(fa_left);
 		draw_set_valign(fa_top);
-		room_goto(rm_start);
+		obj_transition.transition_to(rm_start, c_black);
 	}
 }
 

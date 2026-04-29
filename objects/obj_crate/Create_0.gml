@@ -18,10 +18,19 @@ function create() {
 	is_destroyed = false;
 }
 
+
+
 function draw() {
 	if (is_destroyed) {
 		draw_sprite(sprite_index, 1, original_position[0], original_position[1]);
 	} else draw_self();
+}
+
+function after_draw() {
+	if (global.crowbar_collected and highlight) {
+		highlight = false;
+		draw_sprite(sprite_index, 2, x, y);
+	}
 }
 
 create();
