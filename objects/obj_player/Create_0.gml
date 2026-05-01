@@ -16,6 +16,7 @@ function create() {
 	x_move = 0;
 	y_move = 0;
 	frozen = false;
+	frozen_timer = 0;
 	step_timer_max = 30;
 	step_timer = step_timer_max;
 	spr_ind = 0;
@@ -35,7 +36,10 @@ function create() {
 		[2,0],
 		[2,0],
 		[2,0],
+		[13,-6],
 	]
+	
+	cheering = false;
 	audio_play_sound(snd_cave,0,true);
 }
 
@@ -50,45 +54,51 @@ function is_colliding(place_x, place_y) {
 function check_inputs() {
 	x_move = 0;
 	y_move = 0;
-	sprinting = false;
-	if (keyboard_check_pressed(ord("W"))) {
+	if (keyboard_check_pressed(ord("W")) or keyboard_check_pressed(vk_up)) {
+		ds_list_delete(pressed, ds_list_find_index(pressed, Directions.UP));
 		ds_list_add(pressed, Directions.UP);
 	}
-	if (keyboard_check_pressed(ord("A"))) {
+	if (keyboard_check_pressed(ord("A")) or keyboard_check_pressed(vk_left)) {
+		ds_list_delete(pressed, ds_list_find_index(pressed, Directions.LEFT));
 		ds_list_add(pressed, Directions.LEFT);
 	}
-	if (keyboard_check_pressed(ord("S"))) {
+	if (keyboard_check_pressed(ord("S")) or keyboard_check_pressed(vk_down)) {
+		ds_list_delete(pressed, ds_list_find_index(pressed, Directions.DOWN));
 		ds_list_add(pressed, Directions.DOWN);
 	}
-	if (keyboard_check_pressed(ord("D"))) {
+	if (keyboard_check_pressed(ord("D")) or keyboard_check_pressed(vk_right)) {
+		ds_list_delete(pressed, ds_list_find_index(pressed, Directions.RIGHT));
 		ds_list_add(pressed, Directions.RIGHT);
 	}
-	if (keyboard_check_released(ord("W"))) {
+	if (keyboard_check_released(ord("W")) or keyboard_check_released(vk_up)) {
 		ds_list_delete(pressed, ds_list_find_index(pressed, Directions.UP));
 	}
-	if (keyboard_check_released(ord("A"))) {
+	if (keyboard_check_released(ord("A")) or keyboard_check_released(vk_left)) {
 		ds_list_delete(pressed, ds_list_find_index(pressed, Directions.LEFT));
 	}
-	if (keyboard_check_released(ord("S"))) {
+	if (keyboard_check_released(ord("S")) or keyboard_check_released(vk_down)) {
 		ds_list_delete(pressed, ds_list_find_index(pressed, Directions.DOWN));
 	}
-	if (keyboard_check_released(ord("D"))) {
+	if (keyboard_check_released(ord("D")) or keyboard_check_released(vk_right)) {
 		ds_list_delete(pressed, ds_list_find_index(pressed, Directions.RIGHT));
 	}
-
-	if (keyboard_check(ord("S"))) {
-		y_move = 1;
-	} else if (keyboard_check(ord("W"))) {
+	
+	switch (ds_list_top(pressed)) {
+	case Directions.UP:
 		y_move = -1;
-	}
-	if (keyboard_check(ord("D"))) {
+		break;
+	case Directions.DOWN:
+		y_move = 1;
+		break;
+	case Directions.RIGHT:
 		x_move = 1;
-	} else if (keyboard_check(ord("A"))) {
+		break;
+	case Directions.LEFT:
 		x_move = -1;
+		break;
 	}
-	if (keyboard_check(vk_shift)) {
-		sprinting = true;
-	}
+	
+	sprinting = keyboard_check(vk_shift);
 }
 
 function move() {
@@ -167,26 +177,32 @@ function interact() {
 }
 
 function highlight() {
+	var thing = instance_place(x, y, obj_reset_square);
+	if (thing != noone) {
+		thing.highlight = true;
+		return;
+	}
+	
 	switch (facing) {
 	case  Directions.UP:
 		thing = collision_rectangle(x + sprite_width / 2 - 3, y + sprite_height - 4,
 									x + sprite_width / 2 + 3, y + sprite_height - 3,
-									obj_stone, false, true);
+									[obj_stone, obj_boulder], false, true);
 		break;
 	case Directions.LEFT:
 		thing = collision_rectangle(x + sprite_width / 2 - 4, y + sprite_height - 3,
 									x + sprite_width / 2 - 3, y + sprite_height,
-									obj_stone, false, true);
+									[obj_stone, obj_boulder], false, true);
 		break;
 	case Directions.DOWN:
 		thing = collision_rectangle(x + sprite_width / 2 - 3, y + sprite_height,
 									x + sprite_width / 2 + 3, y + sprite_height + 1,
-									obj_stone, false, true);
+									[obj_stone, obj_boulder], false, true);
 		break;
 	case Directions.RIGHT:
 		thing = collision_rectangle(x + sprite_width / 2 + 3, y + sprite_height - 3,
 									x + sprite_width / 2 + 4, y + sprite_height,
-									obj_stone, false, true);
+									[obj_stone, obj_boulder], false, true);
 		break;
 	}
 	if (thing != noone) {
@@ -200,12 +216,39 @@ function crowbar() {
 	global.crowbar_collected = true;
 }
 
+function freeze() {
+	ds_list_clear(pressed);
+	frozen = true;
+}
+
+function unfreeze() {
+	frozen = false;
+	cheering = false;
+	if (keyboard_check(ord("W")) or keyboard_check(vk_up)) {
+		ds_list_add(pressed, Directions.UP);
+	}
+	if (keyboard_check(ord("A")) or keyboard_check(vk_left)) {
+		ds_list_add(pressed, Directions.LEFT);
+	}
+	if (keyboard_check(ord("S")) or keyboard_check(vk_down)) {
+		ds_list_add(pressed, Directions.DOWN);
+	}
+	if (keyboard_check(ord("D")) or keyboard_check(vk_right)) {
+		ds_list_add(pressed, Directions.RIGHT);
+	}
+}
+
 function step() {
-	if (not frozen) {
+	if (frozen) {
+		if (frozen_timer > 0) {
+			frozen_timer--;
+			if (frozen_timer == 0) unfreeze();
+		}
+	} else {
 		check_inputs();
 		move();
 		highlight();
-		if (keyboard_check_pressed(vk_space)) {
+		if (keyboard_check_pressed(vk_space) or keyboard_check_pressed(ord("Z"))) {
 			interact();
 		}
 		if (x_move == 0 and y_move == 0) {
@@ -214,49 +257,24 @@ function step() {
 			if (--step_timer == 0) {
 				step_timer = step_timer_max;
 			}
-			ds_list_copy(temp_pressed, pressed);
-			while (ds_list_size(temp_pressed) > 0) {
-				top_value = ds_list_find_value(temp_pressed, ds_list_size(temp_pressed) - 1);
-				switch (top_value) {
-				case Directions.LEFT:
-					if (ds_list_find_index(temp_pressed, Directions.RIGHT) != -1) {
-						ds_list_delete(temp_pressed, ds_list_size(temp_pressed) - 1);
-						continue;
-					}
-					break;
-				case  Directions.UP:
-					if (ds_list_find_index(temp_pressed, Directions.DOWN) != -1) {
-						ds_list_delete(temp_pressed, ds_list_size(temp_pressed) - 1);
-						continue;
-					}
-					break;
-				case Directions.DOWN:
-					break;
-				case Directions.RIGHT:			
-					if (ds_list_size(temp_pressed) == 4) {
-						ds_list_delete(temp_pressed, ds_list_size(temp_pressed) - 1);
-						continue;
-					}
-					break;
-				}
-				facing = top_value;
-				break;
-			}
 		}
 	}
-	spr_ind = [9,3,0,6][facing]
+	if (not ds_list_empty(pressed)) {
+		facing = ds_list_top(pressed);
+		spr_ind = [9,3,0,6][facing]
+	}
 }
 function draw() {
-	var curr_spr = spr_ind +
+	var curr_spr = cheering ? 12 : (spr_ind +
 			(step_timer >= step_timer_max / 4 * 3 and step_timer < step_timer_max         ? 1 :
-			(step_timer >= step_timer_max / 4     and step_timer < step_timer_max / 4 * 2 ? 2 : 0));
-	if (global.crowbar_collected && facing == Directions.UP) {
+			(step_timer >= step_timer_max / 4     and step_timer < step_timer_max / 4 * 2 ? 2 : 0)));
+	if (global.crowbar_collected and (cheering or facing == Directions.UP)) {
 		draw_sprite_ext(spr_crowbar, -1, x + crowbar_offset[curr_spr][0], y + crowbar_offset[curr_spr][1],
 		(facing == Directions.LEFT) ? -1 : 1, 1, 0, c_white, 1);
 	}
 	draw_sprite_ext(spr_player, curr_spr, x, y,
 			1, 1, 0, c_white, 1);
-	if (global.crowbar_collected && facing != Directions.UP) {
+	if (global.crowbar_collected and not cheering and facing != Directions.UP) {
 		draw_sprite_ext(spr_crowbar, -1, x + crowbar_offset[curr_spr][0], y + crowbar_offset[curr_spr][1],
 		(facing == Directions.LEFT) ? -1 : 1, 1, 0, c_white, 1);
 	}

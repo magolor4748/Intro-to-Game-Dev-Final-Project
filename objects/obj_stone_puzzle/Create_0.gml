@@ -16,6 +16,7 @@ function create() {
 	ds_list_add(global.puzzles, id);
 	
 	reset_count = 0;
+	won = false;
 	stones = ds_list_create();
 	others = ds_list_create();
 	instance_create_layer(x, y, "FurtherBack",

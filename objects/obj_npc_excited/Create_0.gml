@@ -1,6 +1,14 @@
 // Inherit the parent event
 event_inherited();
 
+function create() {
+	reset();
+	moving_max = 30;
+	original_x = x;
+	original_y = y;
+	possible = ds_list_create();
+}
+
 function get_text() {
 	if (global.puzzles[|0].reset_count > 5) {
 		if (global.crowbar_collected) {
@@ -25,3 +33,25 @@ function get_text() {
 	}
 	return "Look, there's a cave-in, that\nmeans we're close! Now\nhow to get out...";
 }
+
+function step() {
+	swap_layers(self);
+	if (moving) {
+		if (moving_timer == moving_max) {
+			reset();
+		} else {
+			moving_timer += 1;
+			position_x = previous_x + (x - previous_x) * (moving_timer / moving_max);
+			position_y = previous_y + (y - previous_y) * (moving_timer / moving_max);
+		}
+	} else {
+		if (x >= original_x - 16 * 2) ds_list_add(possible, Directions.LEFT);
+		if (x <= original_x + 16 * 2) ds_list_add(possible, Directions.RIGHT);
+		if (y <= original_y + 16 * 2) ds_list_add(possible, Directions.DOWN);
+		if (y >= original_y - 16 * 2) ds_list_add(possible, Directions.UP);
+		move(possible[|irandom(ds_list_size(possible) - 1)]);
+		ds_list_clear(possible);
+	}
+}
+
+create();

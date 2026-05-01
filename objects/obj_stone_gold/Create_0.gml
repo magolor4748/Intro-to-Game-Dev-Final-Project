@@ -2,5 +2,8 @@
 event_inherited();
 
 function win(square) {
-	square.win();
+	if (not square.puzzle.won) {
+		square.puzzle.win();
+	}
+	square.puzzle.won = true;
 }

@@ -2,6 +2,8 @@
 event_inherited();
 
 function create() {
+	reset();
+	moving_max = 30;
 	will_whine = false;
 	whine_timer = 0;
 }
@@ -33,6 +35,16 @@ function step() {
 			whine_timer = 0;
 			will_whine = false;
 			audio_play_sound_ext({sound: snd_whine, priority: 1, loop: false, pitch: .9 + random(.3)});
+		}
+	}
+	
+	if (moving) {
+		if (moving_timer == moving_max) {
+			reset();
+		} else {
+			moving_timer += 1;
+			position_x = previous_x + (x - previous_x) * (moving_timer / moving_max);
+			position_y = previous_y + (y - previous_y) * (moving_timer / moving_max);
 		}
 	}
 }

@@ -14,7 +14,7 @@ function step() {
 }
 
 function draw() {
-	draw_sprite_ext(spr_dust, version, x, y, 1, 1, ang, c_white, 1);
+	draw_sprite_ext(spr_dust, version, x, y, 1, 1, ang, c_white, 0.6 * (1 - lifespan / 12));
 }
 
 create();

@@ -43,7 +43,7 @@ function step() {
 			reset();
 			var square = instance_place(x, y, obj_win_square);
 			if (square != noone) {
-				puzzle.win();
+				id.win(square);
 			}
 		} else {
 			moving_timer += 1;
