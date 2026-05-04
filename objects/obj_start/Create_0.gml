@@ -44,7 +44,7 @@ function draw() {
 		draw_text(240, 190, "After seeking refuge from the storm,");
 		draw_text(240, 210, "You and your crew find yourselves stuck");
 		draw_text(240, 230, "Within some ancient mechanism!");
-		draw_text(240, 270, "Space to start, interact");
+		draw_text(240, 270, "Press Space or Z to Start!");
 	}
 }
 

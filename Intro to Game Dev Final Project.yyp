@@ -106,6 +106,7 @@
     {"id":{"name":"spr_tree","path":"sprites/spr_tree/spr_tree.yy",},},
     {"id":{"name":"spr_wall","path":"sprites/spr_wall/spr_wall.yy",},},
     {"id":{"name":"spr_win_square","path":"sprites/spr_win_square/spr_win_square.yy",},},
+    {"id":{"name":"spr_you_win","path":"sprites/spr_you_win/spr_you_win.yy",},},
     {"id":{"name":"ts_floor","path":"tilesets/ts_floor/ts_floor.yy",},},
     {"id":{"name":"ts_walls","path":"tilesets/ts_walls/ts_walls.yy",},},
   ],

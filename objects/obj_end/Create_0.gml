@@ -17,7 +17,7 @@ function draw() {
 	draw_set_valign(fa_middle);
 	draw_set_colour(c_white);
 	draw_set_font(fnt_main);
-	draw_text(480 / 2, 320 / 2 - 16, "You win!");
+	draw_sprite(spr_you_win, -1, 480 / 2, 220 / 2 - 16);
 	draw_text(480 / 2, 350 / 2 - 16, "Resources used:");
 	draw_text(480 / 2, 380 / 2 - 16, "my poor desk");
 	draw_text(480 / 2, 420 / 2 - 16, "Nyasynth (based on Meowsynth) + Element");
