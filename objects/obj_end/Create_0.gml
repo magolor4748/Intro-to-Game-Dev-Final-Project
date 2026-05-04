@@ -1,8 +1,4 @@
 function create() {
-	draw_set_halign(fa_center);
-	draw_set_valign(fa_middle);
-	draw_set_colour(c_white);
-	draw_set_font(fnt_main);
 	surface_resize(application_surface, 960, 640);
 	window_set_size(960, 640);
 	window_center();
@@ -17,6 +13,10 @@ function step() {
 }
 
 function draw() {
+	draw_set_halign(fa_center);
+	draw_set_valign(fa_middle);
+	draw_set_colour(c_white);
+	draw_set_font(fnt_main);
 	draw_text(480 / 2, 320 / 2 - 16, "You win!");
 	draw_text(480 / 2, 350 / 2 - 16, "Resources used:");
 	draw_text(480 / 2, 380 / 2 - 16, "my poor desk");

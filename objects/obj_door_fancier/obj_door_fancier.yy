@@ -3,13 +3,14 @@
   "%Name":"obj_door_fancier",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
   "name":"obj_door_fancier",
   "overriddenProperties":[
     {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_door","path":"objects/obj_door/obj_door.yy",},"propertyId":{"name":"puzzle_offset","path":"objects/obj_door/obj_door.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"[-5,4]",},
     {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_door","path":"objects/obj_door/obj_door.yy",},"propertyId":{"name":"puzzle_settings","path":"objects/obj_door/obj_door.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"{puzzle_width: 15, puzzle_height: 10, stone_positions: [[1,1],[5,1],[6,1],[7,1],[8,1],[9,1],[10,1],[11,1],[12,1],[13,1],[1,2],[3,2],[1,3],[3,3],[5,3],[6,3],[7,3],[8,3],[10,3],[11,3],[12,3],[13,3],[1,4],[3,4],[5,4],[6,4],[7,4],[8,4],[9,4],[11,4],[12,4],[13,4],[1,5],[3,5],[5,5],[6,5],[7,5],[8,5],[9,5],[11,5],[12,5],[13,5],[1,6],[3,6],[5,6],[6,6],[7,6],[8,6],[10,6],[3,7],[5,7],[6,7],[7,7],[8,7],[9,7],[10,7],[11,7],[12,7],[13,7],[1,8],[4,8],[6,8],[7,8],[8,8],[9,8],[10,8],[11,8],[12,8],[13,8]], other_positions: [[obj_crate, 10, 5], [obj_boulder, 3, 1], [obj_boulder, 4, 1]], win_position: [10, 1], win: destroy_self}",},
-    {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_door","path":"objects/obj_door/obj_door.yy",},"propertyId":{"name":"destroy_self","path":"objects/obj_door/obj_door.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"function() {global.rocks_opened = true; instance_destroy(id, true); global.plr.freeze(); ds_stack_push(obj_camera.alt_targets, {x_pos: 96, y_pos: 592, timer: 80, callback: function(){global.plr.cheering = true; global.plr.frozen_timer = 100; obj_duck.duck(); audio_play_sound(snd_door, 2, false);}},{x_pos: x, y_pos: y, timer: 80, callback: function(){audio_play_sound_ext({sound: snd_whine, priority: 1, loop: false, pitch: .9 + random(.3)});}},{x_pos: x, y_pos: y, timer: 80, callback: function(){audio_play_sound_ext({sound: snd_whine, priority: 1, loop: false, pitch: .9 + random(.3)});}});}",},
+    {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_door","path":"objects/obj_door/obj_door.yy",},"propertyId":{"name":"destroy_self","path":"objects/obj_door/obj_door.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"function() {}",},
   ],
   "parent":{
     "name":"Objects",
@@ -32,7 +33,10 @@
   "physicsShape":1,
   "physicsShapePoints":[],
   "physicsStartAwake":true,
-  "properties":[],
+  "properties":[
+    {"$GMObjectProperty":"v2","%Name":"spr_ind","filters":[],"listItems":[],"multiselect":false,"name":"spr_ind","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"0","varType":1,},
+    {"$GMObjectProperty":"v2","%Name":"boom_timer","filters":[],"listItems":[],"multiselect":false,"name":"boom_timer","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"-1","varType":1,},
+  ],
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,

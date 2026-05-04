@@ -9,6 +9,7 @@ function create() {
 	global.plr = id;
 	global.key_collected = false;
 	global.door_unlocked = false;
+	global.rocks_opened = false;
 	global.crowbar_collected = false;
 	move_speed = 2;
 	sprint_speed = 3;
@@ -45,7 +46,6 @@ function create() {
 
 function is_colliding(place_x, place_y) {
 	if place_meeting(place_x, place_y, obj_npc) {
-		global.textbox.prepare_message(instance_place(place_x, place_y, obj_npc));
 		return true
 	};
 	return place_meeting(place_x, place_y, [obj_door, obj_wall, obj_stone, obj_boulder]);
@@ -130,6 +130,7 @@ function interact() {
 	var thing = collision_rectangle(x + sprite_width / 2 - 11, y + sprite_height - 11,
 									x + sprite_width / 2 + 11, y + sprite_height + 11, obj_npc, true, true);
 	if (thing != noone) {
+		global.textbox.prepare_message(thing);
 		thing.show_text();
 		return;
 	}
@@ -145,7 +146,7 @@ function interact() {
 		return;
 	}
 	thing = instance_place(x, y, obj_escape_rope);
-	if (thing != noone) {
+	if (thing != noone and instance_nearest(0, 0, obj_npc_excited).y < 223 and instance_nearest(0, 0, obj_npc_sleeping).y < 223) {
 		win();
 	}
 	switch (facing) {
@@ -180,6 +181,14 @@ function highlight() {
 	var thing = instance_place(x, y, obj_reset_square);
 	if (thing != noone) {
 		thing.highlight = true;
+		return;
+	}
+	
+	thing = collision_rectangle(x + sprite_width / 2 - 11, y + sprite_height - 11,
+									x + sprite_width / 2 + 11, y + sprite_height + 11, obj_npc, true, true);
+	if (thing != noone) {
+		thing.highlight = true;
+		thing.highlight_dir = facing;
 		return;
 	}
 	

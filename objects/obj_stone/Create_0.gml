@@ -28,7 +28,7 @@ function move(dir) {
 			x += 16;
 			break;
 	}
-	audio_play_sound_ext({sound: snd_push, priority: 0, loop: false, pitch: .8 + random(.5)});
+	audio_play_sound_ext({sound: snd_push, priority: 0, loop: false, pitch: .8 + xorshift_random(.5)});
 	moving = true;
 }
 

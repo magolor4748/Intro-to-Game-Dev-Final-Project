@@ -3,11 +3,12 @@
   "%Name":"obj_door_inner",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":8,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
   "name":"obj_door_inner",
   "overriddenProperties":[
-    {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_door","path":"objects/obj_door/obj_door.yy",},"propertyId":{"name":"destroy_self","path":"objects/obj_door/obj_door.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"function() {global.door_unlocked = true; instance_destroy(id, true); global.plr.freeze(); ds_stack_push(obj_camera.alt_targets, {x_pos: x, y_pos: y, timer: 80, callback: function(){global.plr.cheering = true; global.plr.frozen_timer = 100; obj_duck.duck(); audio_play_sound(snd_door, 2, false);}})}",},
+    {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_door","path":"objects/obj_door/obj_door.yy",},"propertyId":{"name":"destroy_self","path":"objects/obj_door/obj_door.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"function() { global.door_unlocked = true; global.plr.freeze(); ds_stack_push(obj_camera.alt_targets, {x_pos: x, y_pos: y, timer: 10, callback: function() {obj_door_inner.spr_ind++; audio_play_sound_ext({sound: snd_push, priority: 1, loop: false, pitch: .4 + random(0.2) - 0.1}); }}, {x_pos: x, y_pos: y, timer: 10, callback: function() {obj_door_inner.spr_ind++; audio_play_sound_ext({sound: snd_push, priority: 1, loop: false, pitch: .4 + random(0.2) - 0.1});}}, {x_pos: x, y_pos: y, timer: 10, callback: function() {obj_door_inner.spr_ind++; audio_play_sound_ext({sound: snd_push, priority: 1, loop: false, pitch: .4 + random(0.2) - 0.1}); }}, {x_pos: x, y_pos: y, timer: 10, callback: function() { obj_door_inner.spr_ind++; audio_play_sound_ext({sound: snd_push, priority: 1, loop: false, pitch: .4 + random(0.2) - 0.1});}}, {x_pos: x, y_pos: y, timer: 40, callback: function() {obj_door_inner.x = -1000; obj_door_inner.y = -1000; global.plr.cheering = true; global.plr.frozen_timer = 100; obj_duck.duck(); audio_play_sound(snd_door, 2, false);}});}",},
   ],
   "parent":{
     "name":"Objects",
@@ -30,7 +31,9 @@
   "physicsShape":1,
   "physicsShapePoints":[],
   "physicsStartAwake":true,
-  "properties":[],
+  "properties":[
+    {"$GMObjectProperty":"v2","%Name":"spr_ind","filters":[],"listItems":[],"multiselect":false,"name":"spr_ind","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"0","varType":1,},
+  ],
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,

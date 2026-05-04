@@ -5,7 +5,7 @@ function move(dir) {
 		x = -9900
 		y = -9900
 	} else {
-		audio_play_sound((random(1) > 0.5) ? snd_slap1 : snd_slap2, 1, false);
+		audio_play_sound(xorshift_choose([snd_slap1, snd_slap2]), 1, false);
 	}
 }
 

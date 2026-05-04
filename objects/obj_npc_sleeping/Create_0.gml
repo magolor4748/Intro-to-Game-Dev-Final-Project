@@ -6,6 +6,7 @@ function create() {
 	moving_max = 30;
 	will_whine = false;
 	whine_timer = 0;
+	global.textbox.push_cat = false;
 }
 
 function get_text() {
@@ -19,8 +20,10 @@ function get_text() {
 }
 
 function show_text() {
-	if (global.rocks_opened and global.textbox.is_visible and not will_whine) {
-		audio_play_sound((random(1) > 0.5) ? snd_slap1 : snd_slap2, 1, false);
+	if (global.textbox.push_cat or (global.rocks_opened and global.textbox.is_visible) and not will_whine) {
+		global.textbox.push_cat = true;
+		move(global.plr.facing);
+		audio_play_sound(xorshift_choose([snd_slap1, snd_slap2]), 1, false);
 		will_whine = true;
 	}
 	global.textbox.prepare_message(id);
@@ -34,7 +37,7 @@ function step() {
 		if (whine_timer == 15) {
 			whine_timer = 0;
 			will_whine = false;
-			audio_play_sound_ext({sound: snd_whine, priority: 1, loop: false, pitch: .9 + random(.3)});
+			audio_play_sound_ext({sound: snd_whine, priority: 1, loop: false, pitch: .9 + xorshift_random(.3)});
 		}
 	}
 	
@@ -47,6 +50,14 @@ function step() {
 			position_y = previous_y + (y - previous_y) * (moving_timer / moving_max);
 		}
 	}
+}
+
+function after_draw() {
+	if (highlight and not global.textbox.is_visible) {
+		draw_sprite(spr_npc_highlight, 0, position_x, position_y - 8);
+	}
+	if (highlight and global.textbox.push_cat and not moving) draw_sprite(spr_pointers, highlight_dir, position_x, position_y);
+	highlight = false;
 }
 
 create();

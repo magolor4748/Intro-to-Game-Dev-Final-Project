@@ -6,7 +6,9 @@
   ],
   "managed":true,
   "name":"obj_npc_sleeping",
-  "overriddenProperties":[],
+  "overriddenProperties":[
+    {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_npc","path":"objects/obj_npc/obj_npc.yy",},"propertyId":{"name":"base_pitch","path":"objects/obj_npc/obj_npc.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":".9",},
+  ],
   "parent":{
     "name":"Objects",
     "path":"folders/Objects.yy",
